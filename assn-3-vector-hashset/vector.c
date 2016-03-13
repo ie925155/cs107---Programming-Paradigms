@@ -16,7 +16,10 @@ void VectorNew(vector *v, int elemSize, VectorFreeFunction freeFn, int initialAl
 }
 
 void VectorDispose(vector *v)
-{}
+{
+    assert(v->elems != NULL);
+    free(v->elems);
+}
 
 int VectorLength(const vector *v)
 { return 0; }
