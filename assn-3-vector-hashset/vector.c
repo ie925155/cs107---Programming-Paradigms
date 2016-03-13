@@ -32,7 +32,10 @@ void *VectorNth(const vector *v, int position)
 }
 
 void VectorReplace(vector *v, const void *elemAddr, int position)
-{}
+{
+  assert(elemAddr != NULL);
+  memcpy((char*)v->elems + (v->elemSize * position), elemAddr, v->elemSize);
+}
 
 void VectorInsert(vector *v, const void *elemAddr, int position)
 {}
