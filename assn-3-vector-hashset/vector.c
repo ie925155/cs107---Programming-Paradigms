@@ -27,7 +27,9 @@ int VectorLength(const vector *v)
 }
 
 void *VectorNth(const vector *v, int position)
-{ return NULL; }
+{
+  return (char*)v->elems + (v->elemSize * position);
+}
 
 void VectorReplace(vector *v, const void *elemAddr, int position)
 {}
