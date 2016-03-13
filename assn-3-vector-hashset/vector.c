@@ -22,7 +22,9 @@ void VectorDispose(vector *v)
 }
 
 int VectorLength(const vector *v)
-{ return 0; }
+{
+  return v->logLength;
+}
 
 void *VectorNth(const vector *v, int position)
 { return NULL; }
