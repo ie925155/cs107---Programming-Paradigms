@@ -4,6 +4,14 @@
 #include <string.h>
 #include <assert.h>
 
+
+static void vectorGrow(vector *v)
+{
+  //expand to double size
+  v->allocLength *=2;
+  v->elems = realloc(v->elems, v->allocLength * v->elemSize);
+}
+
 void VectorNew(vector *v, int elemSize, VectorFreeFunction freeFn, int initialAllocation)
 {
     assert(elemSize > 0);
@@ -34,7 +42,7 @@ void *VectorNth(const vector *v, int position)
 void VectorReplace(vector *v, const void *elemAddr, int position)
 {
   assert(elemAddr != NULL);
-  assert(position < v ->allocLength);
+  assert(position < v->allocLength);
   memcpy((char*)v->elems + (v->elemSize * position), elemAddr, v->elemSize);
 }
 
@@ -42,7 +50,12 @@ void VectorInsert(vector *v, const void *elemAddr, int position)
 {}
 
 void VectorAppend(vector *v, const void *elemAddr)
-{}
+{
+  assert(elemAddr != NULL);
+  if(v->logLength == v->allocLength)
+    vectorGrow(v);
+  memcpy((char*)v->elems + (v->logLength * v->elemSize), elemAddr, v->elemSize);
+}
 
 void VectorDelete(vector *v, int position)
 {}
