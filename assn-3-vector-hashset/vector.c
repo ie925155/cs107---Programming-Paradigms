@@ -14,19 +14,19 @@ static void vectorGrow(vector *v)
 
 void VectorNew(vector *v, int elemSize, VectorFreeFunction freeFn, int initialAllocation)
 {
-    assert(elemSize > 0);
-    v->elemSize = elemSize;
-    v->logLength = 0;
-    v->allocLength = initialAllocation;
-    v->elems = malloc(initialAllocation * elemSize);
-    v->freeFn = freeFn;
-    assert(v->elems != NULL);
+  assert(elemSize > 0);
+  v->elemSize = elemSize;
+  v->logLength = 0;
+  v->allocLength = initialAllocation;
+  v->elems = malloc(initialAllocation * elemSize);
+  v->freeFn = freeFn;
+  assert(v->elems != NULL);
 }
 
 void VectorDispose(vector *v)
 {
-    assert(v->elems != NULL);
-    free(v->elems);
+  assert(v->elems != NULL);
+  free(v->elems);
 }
 
 int VectorLength(const vector *v)
@@ -47,7 +47,17 @@ void VectorReplace(vector *v, const void *elemAddr, int position)
 }
 
 void VectorInsert(vector *v, const void *elemAddr, int position)
-{}
+{
+  assert(elemAddr != NULL);
+  assert((position >= 0) && (position <= v->logLength));
+  if(v->logLength == v->allocLength)
+    vectorGrow(v);
+  memcpy((char*)v->elems + ((position+1) * v->elemSize), 
+    (char*)v->elems + (position * v->elemSize), 
+	(v->logLength - position) * v->elemSize);
+  memcpy((char*)v->elems + (position * v->elemSize), elemAddr, v->elemSize);
+  v->logLength++;
+}
 
 void VectorAppend(vector *v, const void *elemAddr)
 {
