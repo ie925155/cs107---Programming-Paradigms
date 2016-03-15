@@ -68,7 +68,14 @@ void VectorAppend(vector *v, const void *elemAddr)
 }
 
 void VectorDelete(vector *v, int position)
-{}
+{
+  assert((position >= 0) && (position < v->logLength));
+  if(v->freeFn != NULL) 
+	v->freeFn((char*)v->elems + (position * v->elemSize));
+  memmove((char*)v->elems + (position * v->elemSize), (char*)v->elems + ((position+1) * v->elemSize), 
+    (v->logLength - position) * v->elemSize);
+  v->logLength--;
+}
 
 void VectorSort(vector *v, VectorCompareFunction compare)
 {}
