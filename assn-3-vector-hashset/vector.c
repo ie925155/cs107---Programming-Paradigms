@@ -52,7 +52,12 @@ void VectorInsert(vector *v, const void *elemAddr, int position)
   assert((position >= 0) && (position <= v->logLength));
   if(v->logLength == v->allocLength)
     vectorGrow(v);
+#if 0  
   memcpy((char*)v->elems + ((position+1) * v->elemSize), 
+    (char*)v->elems + (position * v->elemSize), 
+	(v->logLength - position) * v->elemSize);
+#endif  
+  memmove((char*)v->elems + ((position+1) * v->elemSize), 
     (char*)v->elems + (position * v->elemSize), 
 	(v->logLength - position) * v->elemSize);
   memcpy((char*)v->elems + (position * v->elemSize), elemAddr, v->elemSize);
@@ -65,6 +70,7 @@ void VectorAppend(vector *v, const void *elemAddr)
   if(v->logLength == v->allocLength)
     vectorGrow(v);
   memcpy((char*)v->elems + (v->logLength * v->elemSize), elemAddr, v->elemSize);
+  v->logLength++;
 }
 
 void VectorDelete(vector *v, int position)
