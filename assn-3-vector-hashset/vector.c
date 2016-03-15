@@ -84,8 +84,8 @@ void VectorSort(vector *v, VectorCompareFunction compare)
 
 void VectorMap(vector *v, VectorMapFunction mapFn, void *auxData)
 {
-  assert(mapfn != NULL);
-  for(int i = 0 ; i < v->allocLength ; i++){
+  assert(mapFn != NULL);
+  for(int i = 0 ; i < v->logLength ; i++){
 	mapFn((char*)v->elems + (i * v->elemSize), auxData);
   }	
 }
@@ -93,5 +93,31 @@ void VectorMap(vector *v, VectorMapFunction mapFn, void *auxData)
 static const int kNotFound = -1;
 int VectorSearch(const vector *v, const void *key, VectorCompareFunction searchFn, int startIndex, bool isSorted)
 { 
-	return -1; 
+  assert(startIndex >= 0 && startIndex <= v->logLength);
+  assert(searchFn != NULL);
+  int position = -1;
+  if(isSorted)
+  {
+	void *res = bsearch(key, (char*)v->elems + (startIndex * v->elemSize), (v->logLength - startIndex), 
+	  v->elemSize, searchFn);	
+	if(res != NULL)
+	{
+		for(int i = startIndex ; i < v->logLength ; i++){
+			if(res == ((char*)v->elems + (i * v->elemSize))){
+				position = i;	
+			   	break;
+			}	
+		}	
+	}	
+  }
+  else
+  {
+	for(int i = startIndex ; i < v->logLength ; i++){
+		if(memcmp(key, (char*)v->elems + (i * v->elemSize), v->elemSize) == 0){
+			position = i;
+			break;
+		}	
+	}	
+  }	  
+  return position; 
 }

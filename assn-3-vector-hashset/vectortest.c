@@ -404,8 +404,8 @@ static void MemoryTest()
 int main(int ignored, char **alsoIgnored) 
 {
   SimpleTest();
-  ChallengingTest();
-  MemoryTest();
+  //ChallengingTest();
+  //MemoryTest();
   return 0;
 }
 
