@@ -8,7 +8,10 @@
 static void vectorGrow(vector *v)
 {
   //expand to double size
-  v->allocLength *=2;
+  if(v->allocLength == 0)
+    v->allocLength = 4;
+  else
+    v->allocLength *=2;
   v->elems = realloc(v->elems, v->allocLength * v->elemSize);
 }
 

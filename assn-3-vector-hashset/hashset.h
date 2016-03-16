@@ -28,7 +28,7 @@ typedef int (*HashSetHashFunction)(const void *elemAddr, int numBuckets);
  * by address.  The HashSetCompareFunction compares these elements and
  * decides whether or not they are logically equal or or.  The
  * return value identifies relative ordering:
- * 
+ *
  *   - A negative return value means that the item addressed by elemAddr1
  *     is less than the item addressed by elemAddr2.  The definition of
  *     'less than' is dictated by the implementation's interpretation of the data.
@@ -76,7 +76,7 @@ typedef struct {
   // to be filled in by you
   void *elems;
   int elemSize;
-  int logLength;
+  //int logLength;
   int allocLength;
   HashSetHashFunction hashfn;
   HashSetCompareFunction comparefn;
@@ -89,16 +89,16 @@ typedef struct {
  * Initializes the identified hashset to be empty.  It is assumed that
  * the specified hashset is either raw memory or one previously initialized
  * but later destroyed (using HastSetDispose.)
- * 
+ *
  * The elemSize  parameter specifies the number of bytes that a single element of the
- * table should take up. For example, if you want to store elements of type 
+ * table should take up. For example, if you want to store elements of type
  * Binky, you would pass sizeof(Binky) as this parameter. An assert is
  * raised if this size is less than or equal to 0.
  *
  * The numBuckets parameter specifies the number of buckets that the elements
  * will be partitioned into.  Once a hashset is created, this number does
  * not change.  The numBuckets parameter must be in sync with the behavior of
- * the hashfn, which must return a hash code between 0 and numBuckets - 1.   
+ * the hashfn, which must return a hash code between 0 and numBuckets - 1.
  * The hashfn parameter specifies the function that is called to retrieve the
  * hash code for a given element.  See the type declaration of HashSetHashFunction
  * above for more information.  An assert is raised if numBuckets is less than or
@@ -108,11 +108,11 @@ typedef struct {
  * type declaration for HashSetCompareFunction above for more information.
  *
  * The freefn is the function that will be called on an element that is
- * about to be overwritten (by a new entry in HashSetEnter) or on each element 
- * in the table when the entire table is being freed (using HashSetDispose).  This 
+ * about to be overwritten (by a new entry in HashSetEnter) or on each element
+ * in the table when the entire table is being freed (using HashSetDispose).  This
  * function is your chance to do any deallocation/cleanup required,
- * (such as freeing any pointers contained in the element). The client can pass 
- * NULL for the freefn if the elements don't require any handling. 
+ * (such as freeing any pointers contained in the element). The client can pass
+ * NULL for the freefn if the elements don't require any handling.
  * An assert is raised if either the hash or compare functions are NULL.
  *
  * An assert is raised unless all of the following conditions are met:
@@ -122,7 +122,7 @@ typedef struct {
  *    - comparefn is non-NULL
  */
 
-void HashSetNew(hashset *h, int elemSize, int numBuckets, 
+void HashSetNew(hashset *h, int elemSize, int numBuckets,
 		HashSetHashFunction hashfn, HashSetCompareFunction comparefn, HashSetFreeFunction freefn);
 
 /**
@@ -146,7 +146,7 @@ void HashSetDispose(hashset *h);
 /**
  * Function: HashSetCount
  * ----------------------
- * Returns the number of elements residing in 
+ * Returns the number of elements residing in
  * the specified hashset.
  */
 
@@ -202,5 +202,5 @@ void *HashSetLookup(const hashset *h, const void *elemAddr);
  */
 
 void HashSetMap(hashset *h, HashSetMapFunction mapfn, void *auxData);
-     
+
 #endif

@@ -92,7 +92,8 @@ static void BuildTableOfLetterCounts(hashset *counts)
 {
   struct frequency localFreq, *found;
   int ch;
-  FILE *fp = fopen("hashsettest.c", "r"); // open self as file
+  //FILE *fp = fopen("hashsettest.c", "r"); // open self as file
+  FILE *fp = fopen("/media/sheldon/DATA/Dropbox/cs107/Programming_Assignments/assn-3-vector-hashset-data/thesaurus.txt", "r"); // open self as file
 
   assert(fp != NULL);
   while ((ch = getc(fp)) != EOF) {
