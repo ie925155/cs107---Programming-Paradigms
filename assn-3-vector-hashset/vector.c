@@ -52,13 +52,8 @@ void VectorInsert(vector *v, const void *elemAddr, int position)
   assert((position >= 0) && (position <= v->logLength));
   if(v->logLength == v->allocLength)
     vectorGrow(v);
-#if 0  
-  memcpy((char*)v->elems + ((position+1) * v->elemSize), 
-    (char*)v->elems + (position * v->elemSize), 
-	(v->logLength - position) * v->elemSize);
-#endif  
   memmove((char*)v->elems + ((position+1) * v->elemSize), 
-    (char*)v->elems + (position * v->elemSize), 
+    (char*)v->elems + (position * v->elemSize),
 	(v->logLength - position) * v->elemSize);
   memcpy((char*)v->elems + (position * v->elemSize), elemAddr, v->elemSize);
   v->logLength++;
@@ -76,9 +71,9 @@ void VectorAppend(vector *v, const void *elemAddr)
 void VectorDelete(vector *v, int position)
 {
   assert((position >= 0) && (position < v->logLength));
-  if(v->freeFn != NULL) 
+  if(v->freeFn != NULL)
 	v->freeFn((char*)v->elems + (position * v->elemSize));
-  memmove((char*)v->elems + (position * v->elemSize), (char*)v->elems + ((position+1) * v->elemSize), 
+  memmove((char*)v->elems + (position * v->elemSize), (char*)v->elems + ((position+1) * v->elemSize),
     (v->logLength - position) * v->elemSize);
   v->logLength--;
 }
@@ -93,28 +88,28 @@ void VectorMap(vector *v, VectorMapFunction mapFn, void *auxData)
   assert(mapFn != NULL);
   for(int i = 0 ; i < v->logLength ; i++){
 	mapFn((char*)v->elems + (i * v->elemSize), auxData);
-  }	
+  }
 }
 
 static const int kNotFound = -1;
 int VectorSearch(const vector *v, const void *key, VectorCompareFunction searchFn, int startIndex, bool isSorted)
-{ 
+{
   assert(startIndex >= 0 && startIndex <= v->logLength);
   assert(searchFn != NULL);
   int position = -1;
   if(isSorted)
   {
-	void *res = bsearch(key, (char*)v->elems + (startIndex * v->elemSize), (v->logLength - startIndex), 
-	  v->elemSize, searchFn);	
+	void *res = bsearch(key, (char*)v->elems + (startIndex * v->elemSize), (v->logLength - startIndex),
+	  v->elemSize, searchFn);
 	if(res != NULL)
 	{
 		for(int i = startIndex ; i < v->logLength ; i++){
 			if(res == ((char*)v->elems + (i * v->elemSize))){
-				position = i;	
+				position = i;
 			   	break;
-			}	
-		}	
-	}	
+			}
+		}
+	}
   }
   else
   {
@@ -122,8 +117,8 @@ int VectorSearch(const vector *v, const void *key, VectorCompareFunction searchF
 		if(memcmp(key, (char*)v->elems + (i * v->elemSize), v->elemSize) == 0){
 			position = i;
 			break;
-		}	
-	}	
-  }	  
-  return position; 
+		}
+	}
+  }
+  return position;
 }
