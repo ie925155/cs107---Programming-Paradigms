@@ -33,7 +33,13 @@ void HashSetDispose(hashset *h)
 }
 
 int HashSetCount(const hashset *h)
-{ return 0; }
+{
+	int totalCount = 0;
+	for(int i = 0 ; i < h->logLength ; i++){
+		totalCount += VectorLength((vector*)(char*)h->elems + (i * h->elemSize));
+	}
+	return totalCount;
+}
 
 void HashSetMap(hashset *h, HashSetMapFunction mapfn, void *auxData)
 {}
